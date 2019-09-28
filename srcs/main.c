@@ -6,7 +6,7 @@
 /*   By: rsticks <rsticks@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 15:03:58 by rsticks           #+#    #+#             */
-/*   Updated: 2019/09/26 15:25:29 by rsticks          ###   ########.fr       */
+/*   Updated: 2019/09/28 20:04:12 by rsticks          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,6 @@ int		main(int argc, char **argv)
 	fractol = (t_fractol*)malloc(sizeof(t_fractol));
 	init_mlx(fractol);
 	//init fractol
-	init_cl(fractol);
 	fractol->min = init_complex(-4.0, -2.0);
 	fractol->max.re = 4.0;
 	fractol->max.im = fractol->min.im + (fractol->max.re - fractol->min.re) * HEIGHT / WIDTH;
@@ -135,7 +134,8 @@ int		main(int argc, char **argv)
 	{
 		fractol->id = 2;
 		fractol_julia(fractol, init_complex(-0.9, 0.3));
-	}	
+	}
+	ft_init_cl(fractol);
 	mlx_hook(fractol->mlx.win, 2, 0, key_hook, fractol);
 	mlx_hook(fractol->mlx.win, 6, 0, (int (*)())mouse_move, fractol);
 	mlx_hook(fractol->mlx.win, 17, 0, (int (*)())exit, fractol);

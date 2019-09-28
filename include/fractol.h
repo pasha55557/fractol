@@ -6,7 +6,7 @@
 /*   By: rsticks <rsticks@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 15:04:09 by rsticks           #+#    #+#             */
-/*   Updated: 2019/09/26 15:25:12 by rsticks          ###   ########.fr       */
+/*   Updated: 2019/09/28 20:03:50 by rsticks          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,14 @@
 
 typedef struct			s_cl
 {
-	cl_context			cont;
+	cl_context			context;
 	cl_command_queue	queue;
 	cl_platform_id		plat_id;
 	cl_device_id		dev_id;
 	cl_uint				num_platforms;
 	cl_uint				num_device;
 	cl_kernel			kernel;
+	cl_program			prog;
 }						t_cl;
 
 
@@ -62,7 +63,7 @@ typedef struct			s_fractol
 	int					id;
 }						t_fractol;
 
-void	init_cl(t_fractol *fractol);
+void	ft_init_cl(t_fractol *fractol);
 t_im	init_complex(double re, double im);
 void	fractol_mandelbrot(t_fractol *fractol);
 void	fractol_julia(t_fractol *fractol, t_im k);
