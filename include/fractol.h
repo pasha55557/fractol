@@ -6,7 +6,7 @@
 /*   By: rsticks <rsticks@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 15:04:09 by rsticks           #+#    #+#             */
-/*   Updated: 2019/09/28 20:03:50 by rsticks          ###   ########.fr       */
+/*   Updated: 2019/09/30 16:14:45 by rsticks          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,15 @@
 # include "mlx.h"
 # include <math.h>
 # include <stdio.h>
-# define WIDTH 480
-# define HEIGHT 320
+# define WIDTH 1920
+# define HEIGHT 1080
 
 typedef struct			s_cl
 {
 	cl_context			context;
 	cl_command_queue	queue;
-	cl_platform_id		plat_id;
-	cl_device_id		dev_id;
+	cl_platform_id		*plat_id;
+	cl_device_id		*dev_id;
 	cl_uint				num_platforms;
 	cl_uint				num_device;
 	cl_kernel			kernel;

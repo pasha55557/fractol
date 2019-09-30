@@ -6,7 +6,7 @@
 /*   By: rsticks <rsticks@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 15:03:58 by rsticks           #+#    #+#             */
-/*   Updated: 2019/09/28 20:04:12 by rsticks          ###   ########.fr       */
+/*   Updated: 2019/09/30 14:16:38 by rsticks          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,16 +128,16 @@ int		main(int argc, char **argv)
 	if (ft_strequ(argv[1], "mandelbrot") == 1)
 	{
 		fractol->id = 1;
-		fractol_mandelbrot(fractol);
+		//fractol_mandelbrot(fractol);
 	}
 	if (ft_strequ(argv[1], "julia") == 1)
 	{
 		fractol->id = 2;
-		fractol_julia(fractol, init_complex(-0.9, 0.3));
+		//fractol_julia(fractol, init_complex(-0.9, 0.3));
 	}
 	ft_init_cl(fractol);
-	mlx_hook(fractol->mlx.win, 2, 0, key_hook, fractol);
-	mlx_hook(fractol->mlx.win, 6, 0, (int (*)())mouse_move, fractol);
+	//mlx_hook(fractol->mlx.win, 2, 0, key_hook, fractol);
+	//mlx_hook(fractol->mlx.win, 6, 0, (int (*)())mouse_move, fractol);
 	mlx_hook(fractol->mlx.win, 17, 0, (int (*)())exit, fractol);
 	mlx_loop(fractol->mlx.mlx);
 return(0);

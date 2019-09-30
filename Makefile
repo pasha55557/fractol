@@ -6,12 +6,12 @@
 #    By: rsticks <rsticks@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/21 17:06:57 by rsticks           #+#    #+#              #
-#    Updated: 2019/09/28 20:05:37 by rsticks          ###   ########.fr        #
+#    Updated: 2019/09/30 16:03:16 by rsticks          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME := fractol
-FLAGS := -Wall -Werror -Wextra
+FLAGS := -Wall -Wextra
 MLX := -L./minilibx_macos -lmlx -framework OpenGL -framework AppKit -framework OpenCL
 SRCS := srcs/main.c srcs/add.c srcs/cl.c
 LIB := -L./libft -lft -lm
