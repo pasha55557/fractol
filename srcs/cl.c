@@ -6,7 +6,7 @@
 /*   By: rsticks <rsticks@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/26 15:01:51 by rsticks           #+#    #+#             */
-/*   Updated: 2019/09/30 20:04:34 by rsticks          ###   ########.fr       */
+/*   Updated: 2019/10/01 17:48:10 by rsticks          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,6 @@ void	ft_init_cl(t_fractol *fractol)
 	int		error;
 	char	*kernel_str;
 	size_t	kernel_len;
-	cl_mem	d_mem;
-	cl_mem	img;
-	cl_mem	i_mem;
-	int		intmem[32];
-	double	dmem[32];
-	size_t	global_work_size;
 	char	test[1024];
 
 	error = clGetPlatformIDs(NULL, NULL, &fractol->cl.num_platforms);
@@ -54,8 +48,8 @@ void	ft_init_cl(t_fractol *fractol)
 	fractol->cl.queue = clCreateCommandQueue(fractol->cl.context, fractol->cl.dev_id[0], 0, &error);
 	printf("CreateCommandQueue %d\n", error);
 	fd = open("srcs/kernel.cl", O_RDONLY);
-	kernel_str = (char*)malloc(sizeof(char) * 4000);
-	i = read(fd, kernel_str, 4000);
+	kernel_str = (char*)malloc(sizeof(char) * 10000);
+	i = read(fd, kernel_str, 10000);
 	kernel_str[i] = '\0';
 	kernel_len = ft_strlen(kernel_str);
 	//printf("%s\n", kernel_str);
@@ -71,31 +65,42 @@ void	ft_init_cl(t_fractol *fractol)
 	//exit(1);
 	fractol->cl.kernel = clCreateKernel(fractol->cl.prog, "start", &error);
 	printf("clCreateKernel %d\n", error);
-	d_mem = clCreateBuffer(fractol->cl.context, CL_MEM_READ_WRITE, sizeof(double) * 32, NULL, &error);
+	fractol->cl.d_mem = clCreateBuffer(fractol->cl.context, CL_MEM_READ_WRITE, sizeof(double) * 32, NULL, &error);
 	printf("clCreateBuffer %d\n", error);
-	img = clCreateBuffer(fractol->cl.context, CL_MEM_READ_WRITE, sizeof(int) * WIDTH * HEIGHT, NULL, &error);
+	fractol->cl.img = clCreateBuffer(fractol->cl.context, CL_MEM_READ_WRITE, sizeof(int) * WIDTH * HEIGHT, NULL, &error);
 	printf("clCreateBuffer %d\n", error);
-	i_mem = clCreateBuffer(fractol->cl.context, CL_MEM_READ_WRITE, sizeof(int) * 32, NULL, &error);
+	fractol->cl.i_mem = clCreateBuffer(fractol->cl.context, CL_MEM_READ_WRITE, sizeof(int) * 32, NULL, &error);
 	printf("clCreateBuffer %d\n", error);
-	error = clSetKernelArg(fractol->cl.kernel, 0, sizeof(cl_mem), &i_mem);
+	error = clSetKernelArg(fractol->cl.kernel, 0, sizeof(cl_mem), &fractol->cl.i_mem);
 	printf("clSetKernelArg %d\n", error);
-	error = clSetKernelArg(fractol->cl.kernel, 1, sizeof(cl_mem), &d_mem);
+	error = clSetKernelArg(fractol->cl.kernel, 1, sizeof(cl_mem), &fractol->cl.d_mem);
 	printf("clSetKernelArg %d\n", error);
-	error = clSetKernelArg(fractol->cl.kernel, 2, sizeof(cl_mem), &img);
+	error = clSetKernelArg(fractol->cl.kernel, 2, sizeof(cl_mem), &fractol->cl.img);
 	printf("clSetKernelArg %d\n\n", error);
+	start_kernel(fractol);
+	ft_strdel(&kernel_str);
+}
 
-	printf("run cl\n error = %d\n", error);
+void	start_kernel(t_fractol *fractol)
+{
+	int 		error;
+	double		dmem[32];
+	int			intmem[32];
+	size_t		global_work_size;
+
 	dmem[2] = fractol->min.im;
 	dmem[3] = fractol->min.re;
 	dmem[4] = fractol->max.im;
 	dmem[5] = fractol->max.re;
+	dmem[6] = fractol->k.re;
+	dmem[7] = fractol->k.im;
 	intmem[6] = fractol->id;
 	intmem[7] = WIDTH;
 	intmem[8] = HEIGHT;
 	global_work_size = WIDTH * HEIGHT;
-	error = clEnqueueWriteBuffer(fractol->cl.queue, i_mem, CL_TRUE, 0, sizeof(int) * 32, intmem, 0, NULL, NULL);
-	error = clEnqueueWriteBuffer(fractol->cl.queue, d_mem, CL_TRUE, 0, sizeof(double) * 32, dmem, 0, NULL, NULL);
+	error = clEnqueueWriteBuffer(fractol->cl.queue, fractol->cl.i_mem, CL_TRUE, 0, sizeof(int) * 32, intmem, 0, NULL, NULL);
+	error = clEnqueueWriteBuffer(fractol->cl.queue, fractol->cl.d_mem, CL_TRUE, 0, sizeof(double) * 32, dmem, 0, NULL, NULL);
 	error = clEnqueueNDRangeKernel(fractol->cl.queue, fractol->cl.kernel, 1, NULL, &global_work_size, NULL, 0, NULL, NULL);
-	error = clEnqueueReadBuffer(fractol->cl.queue, img, CL_TRUE, 0, sizeof(int) * WIDTH * HEIGHT, fractol->mlx.data, 0, NULL, NULL);
+	error = clEnqueueReadBuffer(fractol->cl.queue, fractol->cl.img, CL_TRUE, 0, sizeof(int) * WIDTH * HEIGHT, fractol->mlx.data, 0, NULL, NULL);
 	mlx_put_image_to_window(fractol->mlx.mlx, fractol->mlx.win, fractol->mlx.img, 0, 0);
 }

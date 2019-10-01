@@ -6,7 +6,7 @@
 /*   By: rsticks <rsticks@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 15:03:58 by rsticks           #+#    #+#             */
-/*   Updated: 2019/09/30 14:16:38 by rsticks          ###   ########.fr       */
+/*   Updated: 2019/10/01 18:03:26 by rsticks          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,10 @@
 
 int 	mouse_move(int x, int y, t_fractol *fractol)
 {
-	t_im	k;
-
 	if (fractol->x == 1)
 	{
-		k = init_complex(4 * ((double)x / WIDTH - 0.5), 4 * ((double)(HEIGHT - y) / HEIGHT - 0.5));
-		fractol_julia(fractol, k);
+		fractol->k = init_complex(4 * ((double)x / WIDTH - 0.5), 4 * ((double)(HEIGHT - y) / HEIGHT - 0.5));
+		start_kernel(fractol);
 	}
 	return(0);
 }
@@ -30,61 +28,40 @@ int		key_hook(int key, t_fractol *fractol)
 	{
 		fractol->min = init_complex(fractol->min.re * 1.2, fractol->min.im * 1.2);
 		fractol->max = init_complex(fractol->max.re * 1.2, fractol->max.im * 1.2);
-		//fractol->max.re = fractol->max.re + 0.1;
-		if (fractol->id == 1)
-			fractol_mandelbrot(fractol);
-		else if (fractol->id == 2)
-			fractol_julia(fractol, init_complex(-0.9, 0.3));
+		start_kernel(fractol);
 	}
 	if (key == 24)
 	{
-		//printf("%f\n", fractol->min.re);
 		fractol->min = init_complex(fractol->min.re / 1.2, fractol->min.im / 1.2);
 		fractol->max = init_complex(fractol->max.re / 1.2, fractol->max.im / 1.2);
-		//fractol->max.re = fractol->max.re - 0.1;
-		if (fractol->id == 1)
-			fractol_mandelbrot(fractol);
-		else if (fractol->id == 2)
-			fractol_julia(fractol, init_complex(-0.9, 0.3));
+		start_kernel(fractol);
 	}
 	if (key == 124)
 	{
 		fractol->min.re = fractol->min.re - (fractol->max.re / 20);
 		fractol->max.re = fractol->max.re - (fractol->max.re / 20);
-		if (fractol->id == 1)
-			fractol_mandelbrot(fractol);
-		else if (fractol->id == 2)
-			fractol_julia(fractol, init_complex(-0.9, 0.3));
+		start_kernel(fractol);
 	}
 	
 	if (key == 125)
 	{
 		fractol->min.im = fractol->min.im + (fractol->max.im / 20);
 		fractol->max.im = fractol->max.im + (fractol->max.im / 20);
-		if (fractol->id == 1)
-			fractol_mandelbrot(fractol);
-		else if (fractol->id == 2)
-			fractol_julia(fractol, init_complex(-0.9, 0.3));
+		start_kernel(fractol);
 	}
 	
 	if (key == 126)
 	{
 		fractol->min.im = fractol->min.im - (fractol->max.im / 20);
 		fractol->max.im = fractol->max.im - (fractol->max.im / 20);
-		if (fractol->id == 1)
-			fractol_mandelbrot(fractol);
-		else if (fractol->id == 2)
-			fractol_julia(fractol, init_complex(-0.9, 0.3));
+		start_kernel(fractol);
 	}
 
 	if (key == 123)
 	{
 		fractol->min.re = fractol->min.re + (fractol->max.re / 20);
 		fractol->max.re = fractol->max.re + (fractol->max.re / 20);
-		if (fractol->id == 1)
-			fractol_mandelbrot(fractol);
-		else if (fractol->id == 2)
-			fractol_julia(fractol, init_complex(-0.9, 0.3));
+		start_kernel(fractol);
 	}
 	
 	if (key == 49 && fractol->id == 2)
@@ -133,11 +110,11 @@ int		main(int argc, char **argv)
 	if (ft_strequ(argv[1], "julia") == 1)
 	{
 		fractol->id = 2;
-		//fractol_julia(fractol, init_complex(-0.9, 0.3));
+		fractol->k = init_complex(-0.9, 0.3);
 	}
 	ft_init_cl(fractol);
-	//mlx_hook(fractol->mlx.win, 2, 0, key_hook, fractol);
-	//mlx_hook(fractol->mlx.win, 6, 0, (int (*)())mouse_move, fractol);
+	mlx_hook(fractol->mlx.win, 2, 0, key_hook, fractol);
+	mlx_hook(fractol->mlx.win, 6, 0, (int (*)())mouse_move, fractol);
 	mlx_hook(fractol->mlx.win, 17, 0, (int (*)())exit, fractol);
 	mlx_loop(fractol->mlx.mlx);
 return(0);

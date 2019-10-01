@@ -6,7 +6,7 @@
 /*   By: rsticks <rsticks@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 15:04:09 by rsticks           #+#    #+#             */
-/*   Updated: 2019/09/30 16:14:45 by rsticks          ###   ########.fr       */
+/*   Updated: 2019/10/01 17:30:47 by rsticks          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,9 @@ typedef struct			s_cl
 	cl_uint				num_device;
 	cl_kernel			kernel;
 	cl_program			prog;
+	cl_mem				d_mem;
+	cl_mem				img;
+	cl_mem				i_mem;
 }						t_cl;
 
 
@@ -54,6 +57,7 @@ typedef struct			s_mlx
 typedef struct			s_fractol
 {
 	t_cl				cl;
+	t_im				k;
 	t_im				max;
 	t_im				min;
 	t_im				factor;
@@ -63,6 +67,7 @@ typedef struct			s_fractol
 	int					id;
 }						t_fractol;
 
+void	start_kernel(t_fractol *fractol);
 void	ft_init_cl(t_fractol *fractol);
 t_im	init_complex(double re, double im);
 void	fractol_mandelbrot(t_fractol *fractol);

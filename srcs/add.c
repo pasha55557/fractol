@@ -6,7 +6,7 @@
 /*   By: rsticks <rsticks@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/17 13:45:07 by rsticks           #+#    #+#             */
-/*   Updated: 2019/09/24 19:00:48 by rsticks          ###   ########.fr       */
+/*   Updated: 2019/10/01 15:27:16 by rsticks          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,10 @@ void	fractol_mandelbrot(t_fractol *fractol)
 	y = 0;
 	while (y < HEIGHT)
 	{
-		c.im = fractol->max.im - y * fractol->factor.im;
 		x = 0;
 		while (x < WIDTH)
 		{
+			c.im = fractol->max.im - y * fractol->factor.im;
 			c.re = fractol->min.re + x * fractol->factor.re;
 			z = init_complex(c.re, c.im);
 			iter = 0;
