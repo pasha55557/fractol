@@ -6,7 +6,7 @@
 /*   By: rsticks <rsticks@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 15:04:09 by rsticks           #+#    #+#             */
-/*   Updated: 2019/10/05 16:19:08 by rsticks          ###   ########.fr       */
+/*   Updated: 2019/10/05 20:23:24 by rsticks          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ typedef struct			s_mlx
 
 typedef struct			s_fractol
 {
+	int					max_iter;
 	t_cl				cl;
 	t_im				k;
 	t_im				max;
@@ -71,6 +72,7 @@ typedef struct			s_fractol
 	t_im				offset_min;
 }						t_fractol;
 
+void	init_fractol(t_fractol *fractol);
 void	de_zoom(t_fractol *fractol);
 void	zoom(t_fractol *fractol);
 int 	mouse_move(int x, int y, t_fractol *fractol);

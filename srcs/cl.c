@@ -6,7 +6,7 @@
 /*   By: rsticks <rsticks@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/26 15:01:51 by rsticks           #+#    #+#             */
-/*   Updated: 2019/10/02 15:42:10 by rsticks          ###   ########.fr       */
+/*   Updated: 2019/10/05 20:23:24 by rsticks          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ void	start_kernel(t_fractol *fractol)
 	dmem[5] = fractol->max.re;
 	dmem[6] = fractol->k.re;
 	dmem[7] = fractol->k.im;
+	intmem[5] = fractol->max_iter;
 	intmem[6] = fractol->id;
 	intmem[7] = WIDTH;
 	intmem[8] = HEIGHT;
