@@ -83,11 +83,13 @@ __kernel void start(__global int *i_mem, __global double *d_mem, __global int *i
 	k.re = d_mem[6];
 	k.im = d_mem[7];
 	
+	/* fractal mandelbrot */
+
 	if (fractol.id == 1)
 	{
 	fractol.factor_re = (fractol.max_re - fractol.min_re) / (fractol.WIDTH - 1);
 	fractol.factor_im = (fractol.max_im - fractol.min_im) / (fractol.HEIGHT - 1);
-	max_iter = 150;
+	max_iter = 50;
 	c.im = fractol.max_im - fractol.y * fractol.factor_im;
 	c.re = fractol.min_re + fractol.x * fractol.factor_re;
 	z = init_complex(c.re, c.im);
@@ -102,11 +104,14 @@ __kernel void start(__global int *i_mem, __global double *d_mem, __global int *i
 	rgb = set_color(t);
 	img[fractol.gid] = rgb;
 	}
+
+	/* fractal julia */
+
 	if (fractol.id == 2)
 	{
 		fractol.factor_re = (fractol.max_re - fractol.min_re) / (fractol.WIDTH - 1);
 		fractol.factor_im = (fractol.max_im - fractol.min_im) / (fractol.HEIGHT - 1);
-		max_iter = 100;
+		max_iter = 50;
 		c.im = fractol.max_im - fractol.y * fractol.factor_im;
 		c.re = fractol.min_re + fractol.x * fractol.factor_re;
 		z = init_complex(c.re, c.im);

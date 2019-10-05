@@ -6,7 +6,7 @@
 /*   By: rsticks <rsticks@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 15:04:09 by rsticks           #+#    #+#             */
-/*   Updated: 2019/10/01 17:30:47 by rsticks          ###   ########.fr       */
+/*   Updated: 2019/10/05 16:19:08 by rsticks          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include <pthread.h>
 # include <OpenCL/opencl.h>
 # include "../libft/libft.h"
+# include "../libft/get_next_line.h"
 # include "mlx.h"
 # include <math.h>
 # include <stdio.h>
@@ -35,7 +36,6 @@ typedef struct			s_cl
 	cl_mem				img;
 	cl_mem				i_mem;
 }						t_cl;
-
 
 typedef struct			s_im
 {
@@ -62,11 +62,19 @@ typedef struct			s_fractol
 	t_im				min;
 	t_im				factor;
 	t_mlx				mlx;
-	int					x;
-	int					y;
+	int					space;
+	double				x;
+	double				y;
 	int					id;
+	float				zoom;
+	t_im				offset_max;
+	t_im				offset_min;
 }						t_fractol;
 
+void	de_zoom(t_fractol *fractol);
+void	zoom(t_fractol *fractol);
+int 	mouse_move(int x, int y, t_fractol *fractol);
+int		key_hook(int key, t_fractol *fractol);
 void	start_kernel(t_fractol *fractol);
 void	ft_init_cl(t_fractol *fractol);
 t_im	init_complex(double re, double im);

@@ -6,7 +6,7 @@
 /*   By: rsticks <rsticks@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/26 15:01:51 by rsticks           #+#    #+#             */
-/*   Updated: 2019/10/01 17:48:10 by rsticks          ###   ########.fr       */
+/*   Updated: 2019/10/02 15:42:10 by rsticks          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	ft_init_cl(t_fractol *fractol)
 	i = read(fd, kernel_str, 10000);
 	kernel_str[i] = '\0';
 	kernel_len = ft_strlen(kernel_str);
-	//printf("%s\n", kernel_str);
+	//printf("%s", kernel_str);
 	
 	fractol->cl.prog = clCreateProgramWithSource(fractol->cl.context, 1, (const char**)&kernel_str, &kernel_len, &error);
 	printf("CreateProgramWithSource %d\n", error);
