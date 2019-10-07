@@ -32,7 +32,7 @@ typedef struct			s_fractol
 	int					gid;
 }						t_fractol;
 
-int		set_color(double t);
+int		set_color(double t, int	rc, int gc, int bc);
 void	fractol_mandelbrot(t_fractol fractol, __global int *img);
 t_im	init_complex(double re, double im);
 
@@ -45,16 +45,16 @@ t_im	init_complex(double re, double im)
 	return(comp);
 }
 
-int		set_color(double t)
+int		set_color(double t, int	rc, int gc, int bc)
 {
 	int r;
 	int g;
 	int b;
 
-	r = (int)(9 * (1 - t) * pow(t, 3) * 255);
-	g = (int)(15 * pow((1 - t), 2) * pow(t, 2) * 255);
-	b = (int)(8.5 * pow((1 - t), 3) * t * 255);
-	return ((b << 16) | (g << 8) | r);
+	r = (int)(8.5 * pow((1 - t), 3) * t * bc);
+	g = (int)(15 * pow((1 - t), 2) * pow(t, 2) * gc);
+	b = (int)(9 * (1 - t) * pow(t, 3) * rc);
+	return (((r << 16) | (g << 8) | b));
 }
 
 __kernel void start(__global int *i_mem, __global double *d_mem, __global int *img)
@@ -68,6 +68,9 @@ __kernel void start(__global int *i_mem, __global double *d_mem, __global int *i
 	int			max_iter;
 	double		t;
 	int			rgb;
+	int			r;
+	int			g;
+	int			b;
 
 	id = get_global_id(0);
 	fractol.gid = id;
@@ -83,26 +86,34 @@ __kernel void start(__global int *i_mem, __global double *d_mem, __global int *i
 	k.re = d_mem[6];
 	k.im = d_mem[7];
 	max_iter = i_mem[5];
+	r = i_mem[4];
+	g = i_mem[3];
+	b = i_mem[2];
 	
 	/* fractal mandelbrot */
 
 	if (fractol.id == 1)
 	{
-	fractol.factor_re = (fractol.max_re - fractol.min_re) / (fractol.WIDTH - 1);
-	fractol.factor_im = (fractol.max_im - fractol.min_im) / (fractol.HEIGHT - 1);
-	c.im = fractol.max_im - fractol.y * fractol.factor_im;
-	c.re = fractol.min_re + fractol.x * fractol.factor_re;
-	z = init_complex(c.re, c.im);
-	iter = 0;
-	while (pow(z.re, 2.0) + pow(z.im, 2.0) <= 256 && iter < max_iter)
-	{
-		z = init_complex(pow(z.re, 2.0) - pow(z.im, 2.0) + c.re, 2.0 * z.re * z.im + c.im);
-		// формула
-	iter++;
-	}
-	t = (double)iter / (double)max_iter;
-	rgb = set_color(t);
-	img[fractol.gid] = rgb;
+		fractol.factor_re = (fractol.max_re - fractol.min_re) / (fractol.WIDTH - 1);
+		fractol.factor_im = (fractol.max_im - fractol.min_im) / (fractol.HEIGHT - 1);
+		c.im = fractol.max_im - fractol.y * fractol.factor_im;
+		c.re = fractol.min_re + fractol.x * fractol.factor_re;
+		z = init_complex(c.re, c.im);
+		iter = 0;
+		while (pow(z.re, 2.0) + pow(z.im, 2.0) <= 256 && iter < max_iter)
+		{
+			z = init_complex(pow(z.re, 2.0) - pow(z.im, 2.0) + c.re, 2.0 * z.re * z.im + c.im);
+			// формула
+			iter++;
+		}
+		if (iter == max_iter)
+				rgb = 0;
+		else
+		{
+			t = pow(((double)iter / (double)(max_iter)), 2.0);
+			rgb = set_color(t, r, g, b);
+		}
+		img[fractol.gid] = rgb;
 	}
 
 	/* fractal julia */
@@ -115,7 +126,7 @@ __kernel void start(__global int *i_mem, __global double *d_mem, __global int *i
 		c.re = fractol.min_re + fractol.x * fractol.factor_re;
 		z = init_complex(c.re, c.im);
 		iter = 0;
-		while (pow(z.re, 2.0) + pow(z.im, 2.0) <= 4 && iter < max_iter)
+		while (pow(z.re, 2.0) + pow(z.im, 2.0) <= 256 && iter < max_iter)
 		{
 			z = init_complex(pow(z.re, 2.0) - pow(z.im, 2.0) + k.re, 2.0 * z.re * z.im + k.im);
 			iter++;
@@ -124,8 +135,58 @@ __kernel void start(__global int *i_mem, __global double *d_mem, __global int *i
 			rgb = 0;
 		else
 		{
-			t = ((double)iter / (double)max_iter);
-			rgb = set_color(t);
+			t = pow(((double)iter / (double)(max_iter)), 2.0);
+			rgb = set_color(t, r, g, b);
+		}
+		img[fractol.gid] = rgb;
+	}
+
+	/* fractal Burningship */
+
+	if (fractol.id == 3)
+	{
+		fractol.factor_re = (fractol.max_re - fractol.min_re) / (fractol.WIDTH - 1);
+		fractol.factor_im = (fractol.max_im - fractol.min_im) / (fractol.HEIGHT - 1);
+		c.im = fractol.max_im - fractol.y * fractol.factor_im;
+		c.re = fractol.min_re + fractol.x * fractol.factor_re;
+		z = init_complex(c.re, c.im);
+		iter = 0;
+		while (pow(z.re, 2.0) + pow(z.im, 2.0) <= 256 && iter < max_iter)
+		{
+    		z = init_complex(pow(z.re, 2.0) - pow(z.im, 2.0) + c.re, -2.0 * fabs(z.re * z.im) + c.im);
+    		iter++;
+		}
+		if (iter == max_iter)
+			rgb = 0;
+		else
+		{
+			t = pow(((double)iter / (double)(max_iter)), 2.0);
+			rgb = set_color(t, r, g, b);
+		}
+		img[fractol.gid] = rgb;
+	}
+
+	/* fractal Mandelbar */
+	
+	if (fractol.id == 4)
+	{
+		fractol.factor_re = (fractol.max_re - fractol.min_re) / (fractol.WIDTH - 1);
+		fractol.factor_im = (fractol.max_im - fractol.min_im) / (fractol.HEIGHT - 1);
+		c.im = fractol.max_im - fractol.y * fractol.factor_im;
+		c.re = fractol.min_re + fractol.x * fractol.factor_re;
+		z = init_complex(c.re, c.im);
+		iter = 0;
+		while (pow(z.re, 2.0) + pow(z.im, 2.0) <= 4 && iter < max_iter)
+		{
+    		z = init_complex(pow(z.re, 2.0) - pow(z.im, 2.0) + c.re, -2.0 * z.re * z.im + c.im);
+    		iter++;
+		}
+		if (iter == max_iter)
+			rgb = 0;
+		else
+		{
+			t = pow(((double)iter / (double)(max_iter)), 2.0);
+			rgb = set_color(t, r, g, b);
 		}
 		img[fractol.gid] = rgb;
 	}

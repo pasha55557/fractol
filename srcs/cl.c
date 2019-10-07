@@ -6,7 +6,7 @@
 /*   By: rsticks <rsticks@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/26 15:01:51 by rsticks           #+#    #+#             */
-/*   Updated: 2019/10/05 20:23:24 by rsticks          ###   ########.fr       */
+/*   Updated: 2019/10/07 18:21:46 by rsticks          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,9 @@ void	start_kernel(t_fractol *fractol)
 	intmem[6] = fractol->id;
 	intmem[7] = WIDTH;
 	intmem[8] = HEIGHT;
+	intmem[4] = fractol->r;
+	intmem[3] = fractol->g;
+	intmem[2] = fractol->b;
 	global_work_size = WIDTH * HEIGHT;
 	error = clEnqueueWriteBuffer(fractol->cl.queue, fractol->cl.i_mem, CL_TRUE, 0, sizeof(int) * 32, intmem, 0, NULL, NULL);
 	error = clEnqueueWriteBuffer(fractol->cl.queue, fractol->cl.d_mem, CL_TRUE, 0, sizeof(double) * 32, dmem, 0, NULL, NULL);

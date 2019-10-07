@@ -6,7 +6,7 @@
 /*   By: rsticks <rsticks@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 15:04:09 by rsticks           #+#    #+#             */
-/*   Updated: 2019/10/05 20:23:24 by rsticks          ###   ########.fr       */
+/*   Updated: 2019/10/07 20:06:27 by rsticks          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,9 @@ typedef struct			s_fractol
 	double				y;
 	int					id;
 	float				zoom;
+	int					r;
+	int					g;
+	int					b;
 	t_im				offset_max;
 	t_im				offset_min;
 }						t_fractol;

@@ -6,7 +6,7 @@
 /*   By: rsticks <rsticks@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/05 16:37:12 by rsticks           #+#    #+#             */
-/*   Updated: 2019/10/05 20:23:24 by rsticks          ###   ########.fr       */
+/*   Updated: 2019/10/07 20:26:05 by rsticks          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,47 +81,47 @@ int		key_hook(int key, t_fractol *fractol)
 	double	offset;
 
 	printf("%d\n", key);
+	if (key == 83)
+		if (fractol->r != 255)
+			fractol->r += 2;
+	if (key == 84)
+		if (fractol->g != 255)
+			fractol->g += 2;
+	if (key == 85)
+		if (fractol->b != 255)
+			fractol->b += 2;
+	if (key == 86)
+		if (fractol->r != 0)
+			fractol->r -= 2;
+	if (key == 87)
+		if (fractol->g != 0)
+			fractol->g -= 2;
+	if (key == 88)
+		if (fractol->b != 0)
+			fractol->b -= 2;
 	if (key == 15) // R
-	{
 		init_fractol(fractol);
-		start_kernel(fractol);
-	}
 	if (key == 116) // page up
 	{
-		if (fractol->id == 2)
+		if (fractol->id == 4)
 			fractol->id = 1;
 		else
 			fractol->id++;
 		init_fractol(fractol);
-		start_kernel(fractol);
 	}
 	if (key == 67)
-	{
 		fractol->max_iter++;
-		start_kernel(fractol);
-	}
 	if (key == 75)
-	{
 		fractol->max_iter--;
-		start_kernel(fractol);
-	}
-	
 	if (key == 27) // -
-	{
 		de_zoom(fractol);
-		start_kernel(fractol);
-	}
 	if (key == 24) // +
-	{
 		zoom(fractol);
-		start_kernel(fractol);
-	}
 	if (key == 124)
 	{
 		offset = ((fractol->max.re - fractol->min.re) / fractol->zoom) / 2;
 		fractol->min.re = fractol->min.re - offset;
 		fractol->max.re = fractol->max.re - offset;
-		start_kernel(fractol);
 	}
 	
 	if (key == 125)
@@ -129,7 +129,6 @@ int		key_hook(int key, t_fractol *fractol)
 		offset = ((fractol->max.re - fractol->min.re) / fractol->zoom) / 2;
 		fractol->min.im = fractol->min.im + offset;
 		fractol->max.im = fractol->max.im + offset;
-		start_kernel(fractol);
 	}
 	
 	if (key == 126)
@@ -137,7 +136,6 @@ int		key_hook(int key, t_fractol *fractol)
 		offset = ((fractol->max.re - fractol->min.re) / fractol->zoom) / 2;
 		fractol->min.im = fractol->min.im - offset;
 		fractol->max.im = fractol->max.im - offset;
-		start_kernel(fractol);
 	}
 
 	if (key == 123)
@@ -145,9 +143,8 @@ int		key_hook(int key, t_fractol *fractol)
 		offset = ((fractol->max.re - fractol->min.re) / fractol->zoom) / 2;
 		fractol->min.re = fractol->min.re + offset;
 		fractol->max.re = fractol->max.re + offset;
-		start_kernel(fractol);
 	}
-	
+	start_kernel(fractol);
 	if (key == 49 && fractol->id == 2)
 	{
 		if (fractol->space == 0)
