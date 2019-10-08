@@ -51,10 +51,10 @@ int		set_color(double t, int	rc, int gc, int bc)
 	int g;
 	int b;
 
-	r = (int)(8.5 * pow((1 - t), 3) * t * bc);
-	g = (int)(15 * pow((1 - t), 2) * pow(t, 2) * gc);
-	b = (int)(9 * (1 - t) * pow(t, 3) * rc);
-	return (((r << 16) | (g << 8) | b));
+	r = (int)(8.5 * pow((1 - t), 3) * t * 255);
+	g = (int)(15 * pow((1 - t), 2) * pow(t, 2) * 255);
+	b = (int)(9 * (1 - t) * pow(t, 3) * 255);
+	return (((r << rc) | (g << gc) | b << bc));
 }
 
 __kernel void start(__global int *i_mem, __global double *d_mem, __global int *img)
@@ -102,7 +102,7 @@ __kernel void start(__global int *i_mem, __global double *d_mem, __global int *i
 		iter = 0;
 		while (pow(z.re, 2.0) + pow(z.im, 2.0) <= 256 && iter < max_iter)
 		{
-			z = init_complex(pow(z.re, 2.0) - pow(z.im, 2.0) + c.re, 2.0 * z.re * z.im + c.im);
+			z = init_complex((pow(z.re, 2.0) - pow(z.im, 2.0)) + c.re, 2.0 * z.re * z.im + c.im);
 			// формула
 			iter++;
 		}
@@ -128,7 +128,7 @@ __kernel void start(__global int *i_mem, __global double *d_mem, __global int *i
 		iter = 0;
 		while (pow(z.re, 2.0) + pow(z.im, 2.0) <= 256 && iter < max_iter)
 		{
-			z = init_complex(pow(z.re, 2.0) - pow(z.im, 2.0) + k.re, 2.0 * z.re * z.im + k.im);
+			z = init_complex((pow(z.re, 2.0) - pow(z.im, 2.0)) + k.re, 2.0 * z.re * z.im + k.im);
 			iter++;
 		}
 		if (iter == max_iter)
@@ -180,6 +180,30 @@ __kernel void start(__global int *i_mem, __global double *d_mem, __global int *i
 		{
     		z = init_complex(pow(z.re, 2.0) - pow(z.im, 2.0) + c.re, -2.0 * z.re * z.im + c.im);
     		iter++;
+		}
+		if (iter == max_iter)
+			rgb = 0;
+		else
+		{
+			t = pow(((double)iter / (double)(max_iter)), 2.0);
+			rgb = set_color(t, r, g, b);
+		}
+		img[fractol.gid] = rgb;
+	}
+		/* fractal tanhjulia */
+
+	if (fractol.id == 5)
+	{
+		fractol.factor_re = (fractol.max_re - fractol.min_re) / (fractol.WIDTH - 1);
+		fractol.factor_im = (fractol.max_im - fractol.min_im) / (fractol.HEIGHT - 1);
+		c.im = fractol.max_im - fractol.y * fractol.factor_im;
+		c.re = fractol.min_re + fractol.x * fractol.factor_re;
+		z = init_complex(c.re, c.im);
+		iter = 0;
+		while (pow(z.re, 2.0) + pow(z.im, 2.0) <= 256 && iter < max_iter)
+		{
+			z = init_complex(tanh(pow(z.re, 2.0) - pow(z.im, 2.0)) + k.re, 4.0 * z.re * z.im + k.im);
+			iter++;
 		}
 		if (iter == max_iter)
 			rgb = 0;
