@@ -6,7 +6,7 @@
 /*   By: rsticks <rsticks@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/04 15:04:09 by rsticks           #+#    #+#             */
-/*   Updated: 2019/10/08 18:50:04 by rsticks          ###   ########.fr       */
+/*   Updated: 2019/10/08 20:59:04 by rsticks          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,17 +75,21 @@ typedef struct			s_fractol
 	t_im				offset_min;
 }						t_fractol;
 
-void	string_print(t_fractol *fractol);
-int		mouse_event(int key, int x, int y, t_fractol *fractol);
-void	init_fractol(t_fractol *fractol);
-void	de_zoom(t_fractol *fractol);
-void	zoom(t_fractol *fractol);
-int 	mouse_move(int x, int y, t_fractol *fractol);
-int		key_hook(int key, t_fractol *fractol);
-void	start_kernel(t_fractol *fractol);
-void	init_cl(t_fractol *fractol);
-t_im	init_complex(double re, double im);
-void	fractol_mandelbrot(t_fractol *fractol);
-void	fractol_julia(t_fractol *fractol, t_im k);
+void					key_hook_move(t_fractol
+*fractol, int key, double offset);
+void					key_hook_control(t_fractol *fractol, int key);
+void					key_hook_color(t_fractol *fractol, int key);
+void					string_print(t_fractol *fractol);
+int						mouse_event(int key, int x, int y, t_fractol *fractol);
+void					init_fractol(t_fractol *fractol);
+void					de_zoom(t_fractol *fractol);
+void					zoom(t_fractol *fractol);
+int						mouse_move(int x, int y, t_fractol *fractol);
+int						key_hook(int key, t_fractol *fractol);
+void					start_kernel(t_fractol *fractol);
+void					init_cl(t_fractol *fractol);
+t_im					init_complex(double re, double im);
+void					fractol_mandelbrot(t_fractol *fractol);
+void					fractol_julia(t_fractol *fractol, t_im k);
 
-# endif
+#endif
