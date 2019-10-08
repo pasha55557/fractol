@@ -74,21 +74,21 @@ __kernel void start(__global int *i_mem, __global double *d_mem, __global int *i
 
 	id = get_global_id(0);
 	fractol.gid = id;
-	fractol.WIDTH = i_mem[7];
-	fractol.HEIGHT = i_mem[8];
+	fractol.min_im = d_mem[0];
+	fractol.min_re = d_mem[1];
+	fractol.max_im = d_mem[2];
+	fractol.max_re = d_mem[3];
+	k.re = d_mem[4];
+	k.im = d_mem[5];
+	b = i_mem[0];
+	g = i_mem[1];
+	r = i_mem[2];
+	max_iter = i_mem[3];
+	fractol.id = i_mem[4];
+	fractol.WIDTH = i_mem[5];
+	fractol.HEIGHT = i_mem[6];
 	fractol.y = id / fractol.WIDTH;
 	fractol.x = id % fractol.WIDTH;
-	fractol.max_re = d_mem[5];
-	fractol.min_re = d_mem[3];
-	fractol.min_im = d_mem[2];
-	fractol.max_im = d_mem[4];
-	fractol.id = i_mem[6];
-	k.re = d_mem[6];
-	k.im = d_mem[7];
-	max_iter = i_mem[5];
-	r = i_mem[4];
-	g = i_mem[3];
-	b = i_mem[2];
 	
 	/* fractal mandelbrot */
 

@@ -6,13 +6,13 @@
 /*   By: rsticks <rsticks@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/05 16:37:12 by rsticks           #+#    #+#             */
-/*   Updated: 2019/10/08 18:25:03 by rsticks          ###   ########.fr       */
+/*   Updated: 2019/10/08 19:24:12 by rsticks          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fractol.h"
 
-int		mouse_event(int key, int x, int y, t_fractol *fractol)
+int			mouse_event(int key, int x, int y, t_fractol *fractol)
 {
 	if (x < 0 || y < 0)
 		return (0);
@@ -25,7 +25,7 @@ int		mouse_event(int key, int x, int y, t_fractol *fractol)
 	return(0);
 }
 
-int 	mouse_move(int x, int y, t_fractol *fractol)
+int 		mouse_move(int x, int y, t_fractol *fractol)
 {
     if (x >= 0 && x <= WIDTH)
 		fractol->x = x;
